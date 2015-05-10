@@ -5,6 +5,8 @@ package com.safkanyazilim.util;
 
 import static org.junit.Assert.*;
 
+import java.util.ConcurrentModificationException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,6 +93,21 @@ public class BinarySearchTreeTests {
 		assertFalse(removed);
 		
 		assertEquals(13, this.tree.size());
+	}
+	
+	@Test
+	public void testConcurrentModificationException() {
+		try {
+			for (Integer i : this.tree) {
+				if (i == 50) {
+					this.tree.remove(6);
+				}
+			}
+			
+			fail();
+		} catch (ConcurrentModificationException e) {
+			
+		}
 	}
 	
 }
