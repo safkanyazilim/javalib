@@ -105,7 +105,17 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 				return this.prev.element;
 			}
 		}
-		
+
+		/*
+		 * Implementation note: Supporting this is not simple, because even if
+		 * a node is "in the past", its removal may involve its successor (if
+		 * it actually has two children). Here, we carefully navigate around
+		 * that issue by seeing if the contained elements are identical (which
+		 * can only happen on such a two-child-node removal); in which case
+		 * we jump forward one more element (which we calculate beforehand since
+		 * if the broken case has happened, navigation is no longer safe) to
+		 * avoid iterating over the same element right after its removal.
+		 */
 		@Override
 		public void remove() {
 			if (this.prev == null) {
