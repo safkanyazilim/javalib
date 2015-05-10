@@ -102,7 +102,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 				throw new ConcurrentModificationException();
 			} else {
 				this.prev = this.next;
-				this.next = BinarySearchTree.this.next(this.next);
+				this.next = BinarySearchTree.this.successor(this.next);
 				return this.prev.element;
 			}
 		}
@@ -284,6 +284,33 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		return null;
 	}
 
+	protected void delete(Node node) {
+		if (node.right == null && node.left == null) {
+			if (node.parent == null) {
+				this.root = null;
+			} else if (node == node.parent.right) {
+				node.parent.right = null;
+			} else {
+				node.parent.left = null;
+			}
+		} else if (node.right == null ^ node.left == null) {
+			Node child = node.right == null ? node.left : node.right;
+			
+			if (node.parent == null) {
+				this.root = child;
+			} else if (node == node.parent.right) {
+				node.parent.right = child;
+			} else {
+				node.parent.left = child;
+			}
+		} else {
+			
+		}
+		
+		
+		
+	}
+	
 	protected boolean insert(E element) {
 		if (this.root == null) {
 			this.root = new Node(null);
@@ -348,19 +375,19 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 
 	
 	/**
-	 * <p>Given a node, find the next node; meaning the node that is 
+	 * <p>Given a node, find the successor node; meaning the node that is 
 	 * one larger in value than the one given in the tree.
 	 * </p>
 	 * 
 	 * <p>This is essentially used by the iterator to iterate 
-	 * over the whole tree. Any "next" operation is O(h), where
-	 * h is the height of the tree. This an upper 
+	 * over the whole tree. Any "successor" operation is O(h), where
+	 * h is the height of the tree. 
+	 * </p> 
 	 * 
 	 * @param node
 	 * @return
 	 */
-	
-	protected Node next(Node node) {
+	protected Node successor(Node node) {
 		if (node  == null) {
 			return null;
 		} else {
@@ -376,5 +403,31 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 			}
 		}
 	}
+
+	/**
+	 * <p>Given a node, find the predecessor node; meaning the node that is 
+	 * one smaller in value than the one given in the tree.
+	 * </p>
+	 * 
+	 * @param node
+	 * @return
+	 */
+	protected Node predecessor(Node node) {
+		if (node  == null) {
+			return null;
+		} else {
+			if (node.left != null) {
+				return this.max(node.left);
+			} else {
+				while (node.parent != null && node.equals(node.parent.left)) {
+					node = node.parent;
+				}
+				
+				return node.parent;
+				
+			}
+		}
+	}
+
 	
 }

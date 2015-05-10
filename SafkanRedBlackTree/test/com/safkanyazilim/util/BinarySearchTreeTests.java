@@ -3,7 +3,7 @@
  */
 package com.safkanyazilim.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,4 +68,13 @@ public class BinarySearchTreeTests {
 		assertEquals(14, count);
 	}
 	
+	@Test 
+	public void testOrderedWalk() {
+		int previous = Integer.MIN_VALUE;
+		
+		for (Integer i : this.tree) {
+			assertTrue(previous < i);
+			previous = i;
+		}
+	}
 }
