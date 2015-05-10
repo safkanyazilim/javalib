@@ -186,6 +186,12 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		}
 	}
 
+	/*
+	 * This returns an iterator, which supports removing of elements. 
+	 * 
+	 * (non-Javadoc)
+	 * @see java.util.AbstractCollection#iterator()
+	 */
 	@Override
 	public Iterator<E> iterator() {
 		return new TreeIterator();
@@ -193,6 +199,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 
 	/*
 	 * The default implementation throws UnsupportedOperationException!
+	 * 
+	 * So it is a case of must-implement.
 	 * 
 	 * (non-Javadoc)
 	 * @see java.util.AbstractCollection#add(java.lang.Object)
@@ -212,6 +220,13 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		return success;
 	}
 
+	
+	/*
+	 * Remove an object. 
+	 * 
+	 * (non-Javadoc)
+	 * @see java.util.AbstractCollection#remove(java.lang.Object)
+	 */
 	@Override
 	public boolean remove(Object o) {
 		if (o instanceof Comparable<?>) {
@@ -229,29 +244,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends E> c) {
-		boolean modified = super.addAll(c);
-		
-		if (modified) {
-			this.modificationCount++;
-		}
-		
-		return modified;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -281,8 +273,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 
 	
 	// =============== Protected Methods =============== 
-	
-
 
 
 	/**
