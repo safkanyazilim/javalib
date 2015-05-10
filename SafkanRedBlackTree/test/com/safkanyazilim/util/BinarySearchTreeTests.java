@@ -77,4 +77,20 @@ public class BinarySearchTreeTests {
 			previous = i;
 		}
 	}
+	
+	@Test
+	public void testDelete() {
+		assertEquals(14, this.tree.size());
+		
+		boolean removed = this.tree.remove(50);
+		
+		assertTrue(removed);
+		
+		removed = this.tree.remove(50);
+		
+		assertFalse(removed);
+		
+		assertEquals(13, this.tree.size());
+	}
+	
 }

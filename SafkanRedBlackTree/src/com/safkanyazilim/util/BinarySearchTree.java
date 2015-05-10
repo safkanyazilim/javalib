@@ -191,7 +191,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+		if (o instanceof Comparable<?>) {
+			@SuppressWarnings("unchecked")
+			Node node = this.find((E)o);
+			
+			if (node != null) {
+				this.delete(node);
+				this.size--;
+				this.modificationCount++;
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -284,31 +298,84 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		return null;
 	}
 
+	/**
+	 * Delete a node from the tree. This method will not touch
+	 * anything other than the tree structure.
+	 * @param node the node to be deleted from the tree.
+	 */
+	
 	protected void delete(Node node) {
 		if (node.right == null && node.left == null) {
-			if (node.parent == null) {
-				this.root = null;
-			} else if (node == node.parent.right) {
-				node.parent.right = null;
-			} else {
-				node.parent.left = null;
-			}
+			this.deleteNodeWithNoChild(node);
 		} else if (node.right == null ^ node.left == null) {
-			Node child = node.right == null ? node.left : node.right;
-			
-			if (node.parent == null) {
-				this.root = child;
-			} else if (node == node.parent.right) {
-				node.parent.right = child;
-			} else {
-				node.parent.left = child;
-			}
+			this.deleteNodeWithOneChild(node);
 		} else {
-			
+			this.deleteNodeWithTwoChildren(node); 
 		}
+	}
+	
+	/**
+	 * Delete a node from the tree. The node must have no
+	 * children.
+	 * @param node the node with no children to be deleted.
+	 */
+	protected void deleteNodeWithNoChild(Node node) {
+		if (node.parent == null) {
+			this.root = null;
+		} else if (node == node.parent.right) {
+			node.parent.right = null;
+		} else {
+			node.parent.left = null;
+		}
+	}
+
+	/**
+	 * Delete a node from the tree. The node must have one
+	 * and only one child.
+	 * @param node the node with one child to be deleted.
+	 */
+	protected void deleteNodeWithOneChild(Node node) {
+		Node child = node.right == null ? node.left : node.right;
 		
+		if (node.parent == null) {
+			this.root = child;
+		} else if (node == node.parent.right) {
+			node.parent.right = child;
+		} else {
+			node.parent.left = child;
+		}
+	}
+	
+	/**
+	 * This handles the "hard case" of deleting a node, which is
+	 * when the node has two children. The algorithm is to choose 
+	 * either the predecessor or successor, swap values, and delete 
+	 * that instead. Here, to avoid bias and due to lack of any 
+	 * other information, predecessor-successor choice is done
+	 * by a coin-flip.
+	 * @param node the node with two children to be deleted.
+	 */
+	protected void deleteNodeWithTwoChildren(Node node) {
+		Node replacement;
 		
+		replacement = Math.random() < 0.5 ? this.predecessor(node) : this.successor(node);
 		
+		node.element = replacement.element;
+
+		/* Implementation note: This call looks recursive, but it is only so
+		 * for one level; this can not come back here again.
+		 * 
+		 * The reason is that, if a node has two children, its successor or
+		 * predecessor can not have two children since they are the right-subtree-minimum
+		 * and left-subtree-maximum elements, respectively.
+		 * 
+		 * They could though, potentially have no children.
+		 * 
+		 * Putting in another method just for the removal of such a node does
+		 * not make much sense. Hence the below call.
+		 */
+		
+		this.delete(replacement); 
 	}
 	
 	protected boolean insert(E element) {
