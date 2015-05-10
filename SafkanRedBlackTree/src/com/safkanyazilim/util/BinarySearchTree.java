@@ -1,7 +1,6 @@
 package com.safkanyazilim.util;
 
 import java.util.AbstractCollection;
-import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
