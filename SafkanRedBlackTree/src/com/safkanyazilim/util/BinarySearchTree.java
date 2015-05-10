@@ -30,6 +30,11 @@ import java.util.Objects;
  * a well-defined order.
  * </p>
  * 
+ * <p>Note that this tree is not balanced in any way. This means the order
+ * in which elements are inserted into the tree do matter for performance.
+ * For instance, inserting elements in perfect increasing order will
+ * make the most unbalanced tree possible, and performance will suffer.
+ * </p>
  * 
  * @author Dr. Y. Safkan
  *
@@ -38,14 +43,11 @@ import java.util.Objects;
 public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollection<E> implements SearchTree<E> {
 	
 	/**
-	 * 
 	 * Internal Node class, representing a node of a binary search tree.
 	 * 
 	 * @author Dr. Y. Safkan
 	 */
-	
-	private class Node {
-
+	protected class Node {
 		/**
 		 * This is the actual external element stored in this node.
 		 */
@@ -75,7 +77,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		
 	}
 
-	private class TreeIterator implements Iterator<E> {
+	protected class TreeIterator implements Iterator<E> {
 		
 		private Node next;
 		private Node prev;
@@ -115,16 +117,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	/**
 	 * The root node of the tree.
 	 */
-	private Node root;
+	protected Node root;
 	/**
 	 * The number of nodes in this tree.
 	 */
-	private int size;
+	protected int size;
 	/**
 	 * The count of successful modification operations on this tree. This is used to keep track
 	 * of modifications being done while an iterator is active.
 	 */
-	private int modificationCount;
+	protected int modificationCount;
 	
 	/**
 	 * Construct a new BinarySearchTree, which is initially empty.
@@ -241,7 +243,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	}
 
 	
-	// =============== Private Methods =============== 
+	// =============== Protected Methods =============== 
 	
 
 
@@ -258,7 +260,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	 * @param element the element we are seeking.
 	 * @return The node which contains given element, or null.
 	 */
-	private Node find(E element) {
+	protected Node find(E element) {
 		Node current = this.root;
 		
 		while (current != null) {
@@ -282,7 +284,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		return null;
 	}
 
-	private boolean insert(E element) {
+	protected boolean insert(E element) {
 		if (this.root == null) {
 			this.root = new Node(null);
 			this.root.element = element;
@@ -314,13 +316,15 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 				}
 			}
 		}
-			
-			
-			
-		
 	}
-	
-	private Node min(Node node) {
+
+	/**
+	 * Find the minimum node in the subtree whose head is the
+	 * given node.
+	 * @param node the root of the subtree
+	 * @return the minimal element in the subtree
+	 */
+	protected Node min(Node node) {
 		while (node.left != null) {
 			node = node.left;
 		}
@@ -328,7 +332,13 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		return node;
 	}
 
-	private Node max(Node node) {
+	/**
+	 * Find the maximum node in the subtree whose head is the
+	 * given node.
+	 * @param node the root of the subtree
+	 * @return the minimal element in the subtree.
+	 */
+	protected Node max(Node node) {
 		while (node.right != null) {
 			node = node.right;
 		}
@@ -337,7 +347,20 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	}
 
 	
-	private Node next(Node node) {
+	/**
+	 * <p>Given a node, find the next node; meaning the node that is 
+	 * one larger in value than the one given in the tree.
+	 * </p>
+	 * 
+	 * <p>This is essentially used by the iterator to iterate 
+	 * over the whole tree. Any "next" operation is O(h), where
+	 * h is the height of the tree. This an upper 
+	 * 
+	 * @param node
+	 * @return
+	 */
+	
+	protected Node next(Node node) {
 		if (node  == null) {
 			return null;
 		} else {
