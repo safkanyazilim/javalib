@@ -6,6 +6,7 @@ package com.safkanyazilim.util;
 import static org.junit.Assert.*;
 
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,13 +18,9 @@ import org.junit.Test;
 public class BinarySearchTreeTests {
 
 	private BinarySearchTree<Integer> tree;
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		this.tree = new BinarySearchTree<>();
+
+	private static BinarySearchTree<Integer> generateTree() {
+		BinarySearchTree<Integer> tree = new BinarySearchTree<>();
 		
 		tree.add(50);
 		tree.add(25);
@@ -39,6 +36,16 @@ public class BinarySearchTreeTests {
 		tree.add(85);
 		tree.add(80);
 		tree.add(99);
+	
+		return tree;
+	}
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		this.tree = generateTree(); 
 	}
 
 	@Test
@@ -109,5 +116,63 @@ public class BinarySearchTreeTests {
 			
 		}
 	}
+	
+	@Test 
+	public void testIteratorRemove() {
+		Iterator<Integer> iterator = this.tree.iterator();
+		
+		while (iterator.hasNext()) {
+			Integer element = iterator.next();
+			
+			if (element == 50) {
+				iterator.remove(); 
+			}
+			
+		}
+	
+		assertEquals(13, this.tree.size());
+		
+	}
+
+	@Test
+	public void testIteratorRemoveAll() {
+		Iterator<Integer> iterator = this.tree.iterator();
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove(); 
+		}
+	
+		assertEquals(0, this.tree.size());
+		
+	}
+
+	@Test
+	public void testRemove12() {
+		
+		assertTrue(this.tree.contains(12));
+		assertTrue(this.tree.remove(12));
+		assertFalse(this.tree.contains(12)); 
+	}
+	
+	@Test
+	public void testExhaustiveRemove() {
+		BinarySearchTree<Integer> fixedTree = generateTree();
+		
+		for (Integer i : fixedTree) {
+			BinarySearchTree<Integer> tree = generateTree();
+			
+			assertTrue(tree.contains(i));
+			
+			assertTrue(tree.remove(i));
+			
+			assertFalse(tree.contains(i));
+			
+			for (Integer j : tree) {
+				assertNotEquals(i, j);
+ 			}
+		}
+	}
+	
 	
 }

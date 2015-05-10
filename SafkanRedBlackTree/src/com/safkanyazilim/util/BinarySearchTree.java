@@ -78,7 +78,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	}
 
 	protected class TreeIterator implements Iterator<E> {
-		
 		private Node next;
 		private Node prev;
 		private int modificationCount;
@@ -109,7 +108,22 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		
 		@Override
 		public void remove() {
-			throw new UnsupportedOperationException();
+			if (this.prev == null) {
+				throw new IllegalStateException();
+			}
+			
+			Node successor = BinarySearchTree.this.successor(this.next);
+			
+			BinarySearchTree.this.delete(this.prev);
+			
+			if (this.next != null && this.next.element == this.prev.element) {
+				this.next = successor;
+			}
+			
+			this.prev = null;
+			BinarySearchTree.this.size--;
+			BinarySearchTree.this.modificationCount++;
+			this.modificationCount++;
 		}
 		
 	}
@@ -131,7 +145,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	/**
 	 * Construct a new BinarySearchTree, which is initially empty.
 	 */
-	
 	public BinarySearchTree() {
 		this.root = null;
 		this.size = 0;
@@ -157,7 +170,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 			@SuppressWarnings("unchecked")
 			E element = (E)o;
 		
-			return this.find(element) == null;
+			return this.find(element) != null;
 		} else {
 			return false;
 		}
@@ -339,10 +352,13 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		
 		if (node.parent == null) {
 			this.root = child;
+			child.parent = null;
 		} else if (node == node.parent.right) {
 			node.parent.right = child;
+			child.parent = node.parent;
 		} else {
 			node.parent.left = child;
+			child.parent = node.parent;
 		}
 	}
 	
