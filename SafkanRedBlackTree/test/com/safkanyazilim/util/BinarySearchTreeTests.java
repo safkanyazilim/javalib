@@ -188,7 +188,28 @@ public class BinarySearchTreeTests {
 		}
 		
 		assertEquals(14, count);
+		
+		assertEquals(3, balanced.height());
 	}
 	
+	@Test
+	public void testHeight() {
+		assertEquals(4, this.tree.height());
+	}
+	
+	@Test
+	public void testHeightCalculation() {
+		BinarySearchTree<Integer> badTree = new BinarySearchTree<Integer>();
+		
+		for (int i = 0; i < 127; i++) {
+			badTree.add(i);
+			
+			assertEquals(i,  badTree.height()); 
+		}
+		
+		BinarySearchTree<Integer> balanced = new BinarySearchTree<Integer>(badTree);
+		
+		assertEquals(6, balanced.height());
+	}
 	
 }

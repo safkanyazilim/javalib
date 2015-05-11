@@ -145,10 +145,17 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	 * The root node of the tree.
 	 */
 	protected Node root;
+	
 	/**
 	 * The number of nodes in this tree.
 	 */
 	protected int size;
+	
+	/**
+	 * The height of this tree.
+	 */
+	protected int height;
+	
 	/**
 	 * The count of successful modification operations on this tree. This is used to keep track
 	 * of modifications being done while an iterator is active.
@@ -156,12 +163,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 	protected int modificationCount;
 	
 	/**
+	 * The modification count at which the height was calculated last. If this
+	 * is not equal to the modification count, the height is outdated and must
+	 * be calculated.
+	 */
+	protected int heightCalculatedModificationCount;
+	
+	/**
 	 * Construct a new BinarySearchTree, which is initially empty.
 	 */
 	public BinarySearchTree() {
 		this.root = null;
 		this.size = 0;
+		this.height = 0;
 		this.modificationCount = 0;
+		this.heightCalculatedModificationCount = 0;
 	}
 	
 	/**
@@ -180,6 +196,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		this.root = this.generateTreeFromSortedArrayRange(elements, 0, elements.length - 1);
 		this.size = elements.length;
 		this.modificationCount = 0;
+		this.height = 0;
+		this.heightCalculatedModificationCount = -1;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -318,10 +336,40 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		}
 	}
 
+	@Override
+	public int height() {
+		if (this.heightCalculatedModificationCount != this.modificationCount) {
+			this.updateHeight();
+			this.heightCalculatedModificationCount = this.modificationCount;
+		}
+		
+		return this.height;
+	}
 	
 	// =============== Protected Methods =============== 
 
-
+	protected void updateHeight() {
+		if (this.root == null) {
+			this.height = 0;
+		} else {
+			this.updateHeightRecursively(this.root, 0);
+		}
+	}
+	
+	protected void updateHeightRecursively(Node node, int currentHeight) {
+		if (currentHeight > this.height) {
+			this.height = currentHeight;
+		}
+		
+		if (node.left != null) {
+			this.updateHeightRecursively(node.left, currentHeight + 1);
+		}
+		
+		if (node.right != null) {
+			this.updateHeightRecursively(node.right, currentHeight + 1);
+		}
+	}
+	
 	/**
 	 * Find a node whose contained element is equal to
 	 * the one we are looking for.
