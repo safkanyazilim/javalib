@@ -174,6 +174,20 @@ public class BinarySearchTreeTests {
 		}
 	}
 	
+	@Test
+	public void testCopyConstructor() {
+		BinarySearchTree<Integer> balanced = new BinarySearchTree<Integer>(this.tree);
+		
+		assertEquals(14, balanced.size()); 
+		
+		int count = 0;
+		
+		for (Integer j : balanced) {
+			count++;
+		}
+		
+		assertEquals(14, count);
+	}
 	
 	
 }

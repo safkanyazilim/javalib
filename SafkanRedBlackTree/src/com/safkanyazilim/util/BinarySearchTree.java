@@ -74,6 +74,10 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 			this(parent, null, null);
 		}
 		
+		Node() {
+			this(null, null, null);
+		}
+		
 	}
 
 	protected class TreeIterator implements Iterator<E> {
@@ -159,6 +163,50 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractCollectio
 		this.size = 0;
 		this.modificationCount = 0;
 	}
+	
+	/**
+	 * Construct a new BinarySearchTree, from an existing BinarySearchTree.
+	 * 
+	 * The resulting BinarySearchTree will be functionally equivalent, however
+	 * it will be a balanced tree, and can be expected to perform better.
+	 * 
+	 * @param binarySearchTree the search tree whose content will be copied.
+	 */
+	public BinarySearchTree(BinarySearchTree<E> binarySearchTree) {
+		// This works because a BinarySearchTree will spit out its elements
+		// in the correct order with an iterator, and toArray uses that.
+		Object[] elements = binarySearchTree.toArray();
+		
+		this.root = this.generateTreeFromSortedArrayRange(elements, 0, elements.length - 1);
+		this.size = elements.length;
+		this.modificationCount = 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Node generateTreeFromSortedArrayRange(Object[] elements, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+		
+		Node node = new Node();
+		
+		int middle = (start + end)/2;
+		node.element = (E)elements[middle];
+
+		node.left = generateTreeFromSortedArrayRange(elements, start, middle - 1);
+		node.right = generateTreeFromSortedArrayRange(elements, middle + 1, end);
+		
+		if (node.left != null) {
+			node.left.parent = node;
+		}
+		
+		if (node.right != null) {
+			node.right.parent = node;
+		}
+		
+		return node;
+	}
+	
 	
 	@Override
 	public int size() {
