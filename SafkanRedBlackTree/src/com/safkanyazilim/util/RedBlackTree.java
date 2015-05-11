@@ -64,7 +64,6 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 		/**
 		 * The color of this node. True means red, false means black.
 		 */
-		@SuppressWarnings("unused")
 		private boolean red;
 		
 		private Node(Node parent, Node left, Node right, boolean red) {
@@ -498,6 +497,23 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 		this.delete(replacement); 
 	}
 	
+	protected void insertFixup(Node node) {
+		while (node.parent.red) {
+			if (node.parent == node.parent.parent.left) {
+				Node uncle = node.parent.parent.right;
+				
+				if (uncle.red) {
+					node.parent.red = false;
+					uncle.red = false;
+					node.parent.parent.red = true;
+					node = node.parent.parent;
+				} else if (node == node.parent.right) {
+					
+				}
+				
+			}
+		}
+	}
 	
 	protected boolean insert(E element) {
 		if (this.root == NIL) {
@@ -514,16 +530,18 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 					return false;
 				} else if (comparison > 0) {
 					if (current.left == NIL) {
-						current.left = new Node(current);
+						current.left = new Node(current, NIL, NIL, true);
 						current.left.element = element;
+						//this.insertFixup(current.left);
 						return true;
 					} else {
 						current = current.left;
 					}
 				} else {
 					if (current.right == NIL) {
-						current.right = new Node(current);
+						current.right = new Node(current, NIL, NIL, true);
 						current.right.element = element;
+						//this.insertFixup(current.right);
 						return true;
 					} else {
 						current = current.right;
@@ -616,6 +634,51 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 			}
 		}
 	}
+
+	protected void leftRotate(Node x) {
+		Node y = x.right;
+		x.right = y.left;
+		
+		if (y.left != NIL) {
+			y.left.parent = x;
+		}
+		
+		y.parent = x.parent;
+		
+		if (x.parent == NIL) {
+			this.root = y;
+		} else if (x == x.parent.left) {
+			x.parent.left = y;
+		} else {
+			x.parent.right = y;
+		}
+		
+		y.left = x;
+		x.parent = y;
+	}
+
+	protected void rightRotate(Node x) {
+		Node y = x.left;
+		x.left = y.right;
+		
+		if (y.right != NIL) {
+			y.right.parent = x;
+		}
+		
+		y.parent = x.parent;
+		
+		if (x.parent == NIL) {
+			this.root = y;
+		} else if (x == x.parent.left) {
+			x.parent.left = y;
+		} else {
+			x.parent.right = y;
+		}
+		
+		y.right = x;
+		x.parent = y;
+	}
+
 
 	
 }
