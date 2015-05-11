@@ -175,6 +175,7 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	@SuppressWarnings("unused")
 	public void testCopyConstructor() {
 		BinarySearchTree<Integer> balanced = new BinarySearchTree<Integer>(this.tree);
 		
