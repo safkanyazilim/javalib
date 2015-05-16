@@ -80,6 +80,17 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 		private Node() {
 			this.red = false;
 		}
+
+		@Override
+		public String toString() {
+			if (this == NIL) {
+				return "NIL";
+			} else {
+				return "(" + this.left.toString() + "|" + this.element.toString() + "|" + this.right.toString() + ")";
+			}
+			
+		}
+
 		
 	}
 
@@ -141,6 +152,7 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 			RedBlackTree.this.modificationCount++;
 			this.modificationCount++;
 		}
+		
 		
 	}
 
@@ -354,6 +366,12 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 		return this.height;
 	}
 	
+	@Override
+	public String toString() {
+		return this.root.toString();
+		
+	}
+	
 	// =============== Protected Methods =============== 
 
 	protected void updateHeight() {
@@ -508,11 +526,36 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 					node.parent.parent.red = true;
 					node = node.parent.parent;
 				} else if (node == node.parent.right) {
-					
+					node = node.parent;
+					this.leftRotate(node);
+				} else {
+				
+					node.parent.red = false;
+					node.parent.parent.red = true;
+					this.rightRotate(node.parent.parent);
+				}
+			} else {
+				Node uncle = node.parent.parent.left;
+				
+				if (uncle.red) {
+					node.parent.red = false;
+					uncle.red = false;
+					node.parent.parent.red = true;
+					node = node.parent.parent;
+				} else if (node == node.parent.left) {
+					node = node.parent;
+					this.rightRotate(node);
+				} else {
+				
+					node.parent.red = false;
+					node.parent.parent.red = true;
+					this.leftRotate(node.parent.parent);
 				}
 				
 			}
 		}
+		
+		this.root.red = false;
 	}
 	
 	protected boolean insert(E element) {
@@ -532,7 +575,7 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 					if (current.left == NIL) {
 						current.left = new Node(current, NIL, NIL, true);
 						current.left.element = element;
-						//this.insertFixup(current.left);
+						this.insertFixup(current.left);
 						return true;
 					} else {
 						current = current.left;
@@ -541,7 +584,7 @@ public class RedBlackTree<E extends Comparable<E>> extends AbstractCollection<E>
 					if (current.right == NIL) {
 						current.right = new Node(current, NIL, NIL, true);
 						current.right.element = element;
-						//this.insertFixup(current.right);
+						this.insertFixup(current.right);
 						return true;
 					} else {
 						current = current.right;

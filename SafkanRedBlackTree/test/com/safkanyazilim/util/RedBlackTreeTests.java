@@ -199,17 +199,29 @@ public class RedBlackTreeTests {
 	
 	@Test
 	public void testHeightCalculation() {
-		BinarySearchTree<Integer> badTree = new BinarySearchTree<Integer>();
+		RedBlackTree<Integer> badTree = new RedBlackTree<Integer>();
 		
 		for (int i = 0; i < 127; i++) {
 			badTree.add(i);
 			
-			assertEquals(i,  badTree.height()); 
 		}
 		
-		BinarySearchTree<Integer> balanced = new BinarySearchTree<Integer>(badTree);
+		RedBlackTree<Integer> balanced = new RedBlackTree<Integer>(badTree);
 		
 		assertEquals(6, balanced.height());
 	}
+	
+	@Test 
+	public void testInsertBalancing() {
+		RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
+		
+		for (int i = 0; i < 256; i++) {
+			tree.add(i);
+		}
+		
+		assertEquals(13, tree.height());
+		
+	}
+
 	
 }
