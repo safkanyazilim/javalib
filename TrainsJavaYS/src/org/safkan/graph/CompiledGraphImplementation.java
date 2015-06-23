@@ -13,23 +13,14 @@ import java.util.Map;
  */
 class CompiledGraphImplementation implements CompiledGraph {
 
-	private static class CompiledLink {
-		public double distance;
-		public CompiledNode target;
-		
-		public CompiledLink(double distance, CompiledNode target) {
-			this.distance = distance;
-			this.target = target;
-		}
-	}
 	
 	private static class CompiledNode {
 		public String id;
-		public Map<String, CompiledLink> links;
+		public Map<String, Double> links;
 		
 		public CompiledNode(Node node) {
 			this.id = node.getId();
-			this.links = new HashMap<String, CompiledGraphImplementation.CompiledLink>();
+			this.links = new HashMap<String, Double>();
 		}
 	}
 	
@@ -52,8 +43,7 @@ class CompiledGraphImplementation implements CompiledGraph {
 			CompiledNode from = this.compiledNodeMap.get(edge.getFrom().getId());
 			CompiledNode to = this.compiledNodeMap.get(edge.getTo().getId());
 			
-			CompiledLink compiledLink = new CompiledLink(edge.getDistance(), to);
-			from.links.put(to.id, compiledLink);
+			from.links.put(to.id, edge.getDistance());
 		}
 	}
 	
@@ -72,13 +62,14 @@ class CompiledGraphImplementation implements CompiledGraph {
 			if (previousCompiledNode == null) {
 				traversedPath = new TraversedPath(node);
 			} else {
-				CompiledLink compiledLink = previousCompiledNode.links.get(compiledNode.id);
 				
-				if (compiledLink == null) {
+				Double distance = previousCompiledNode.links.get(compiledNode.id);
+				
+				if (distance == null) {
 					return null;
 				}
 				
-				traversedPath.addNode(compiledLink.distance, node);
+				traversedPath.addNode(distance.doubleValue(), node);
 			}
 		
 			previousCompiledNode = compiledNode;

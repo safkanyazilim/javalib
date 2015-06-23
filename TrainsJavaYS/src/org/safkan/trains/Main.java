@@ -38,7 +38,7 @@ public class Main {
 		
 		CompiledGraph compiledGraph = graph.compile();
 		
-		Path path = new Path(A, E, D);
+		Path path = new Path(A, E, B, C, D);
 		
 		TraversedPath traversedPath = compiledGraph.traverse(path);
 		
