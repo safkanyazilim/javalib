@@ -46,6 +46,7 @@ public class Main {
 			System.out.println("No path");
 		} else {
 			System.out.println("Path length: " + traversedPath.getTotalDistance()); 
+			System.out.println("Path: " + traversedPath);
 		}
 		
 	}

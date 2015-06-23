@@ -28,5 +28,21 @@ public class TraversedPath extends Path {
 		this.totalDistance += distance;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		
+		for (int i = 0; i < this.nodes.size(); i++) {
+
+			if (i > 0) {
+				buf.append(">");
+				buf.append(this.distances.get(i - 1));
+				buf.append(">");
+			}
+			
+			buf.append(this.nodes.get(i).toString());
+		}
+		
+		return buf.toString();
+	}
 }
