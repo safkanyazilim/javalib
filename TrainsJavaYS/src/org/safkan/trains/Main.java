@@ -1,5 +1,7 @@
 package org.safkan.trains;
 
+import java.util.List;
+
 import org.safkan.graph.CompiledGraph;
 import org.safkan.graph.Graph;
 import org.safkan.graph.Node;
@@ -24,8 +26,8 @@ public class Main {
 		Node E = new Node("E");
 		
 		CompiledGraph compiledGraph = graph.compile();
-		
-		Path path = new Path(A, E, B, C, D);
+		//[C][E][B][C][D][E][B][C]
+		Path path = new Path(C, D, E, B, C, E, B, C);
 		
 		TraversedPath traversedPath = compiledGraph.traverse(path);
 		
@@ -35,6 +37,11 @@ public class Main {
 			System.out.println("Path length: " + traversedPath.getTotalDistance()); 
 			System.out.println("Path: " + traversedPath);
 		}
+		
+		int count = compiledGraph.countPaths(C, C, null, null, 30.0);
+		
+		System.out.println("Path count:" + count);
+		
 		
 	}
 

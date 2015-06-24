@@ -1,44 +1,36 @@
 package org.safkan.graph;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TreeElement {
-	private String nodeId;
-	private Map<Double, TreeElement> children;
-	private TreeElement parent;
-	private int depth;
-	private double distance;
+	String nodeId;
+	Map<Double, TreeElement> children;
+	TreeElement parent;
+	int depth;
+	double distanceFromRoot;
 	
-	public TreeElement(String nodeId) {
-		this(null, nodeId);
-		this.depth = 0;
+	TreeElement(String nodeId) {
+		this(null, nodeId, 0.0);
 	}
 	
-	public TreeElement(TreeElement parent, String nodeId) {
+	TreeElement(TreeElement parent, String nodeId, double distanceFromRoot) {
 		this.nodeId = nodeId;
 		this.parent = parent;
+		this.distanceFromRoot = distanceFromRoot;
 		this.children = new HashMap<Double, TreeElement>();
-		this.depth = this.parent.depth + 1;
-		this.distance = 0.0;
-	}
-
-	public void addChild(double distance, TreeElement child) {
-		this.children.put(distance, child);
+		if (parent != null) {
+			this.depth = this.parent.depth + 1;
+		} else {
+			this.depth = 0;
+		}
 		
 	}
 
-	public String getNodeId() {
-		return nodeId;
+	public void addChild(double edgeDistance, TreeElement child) {
+		this.children.put(edgeDistance, child);
+		
 	}
 
-	public Map<Double, TreeElement> getChildren() {
-		return Collections.unmodifiableMap(children);
-	}
-
-	public TreeElement getParent() {
-		return parent;
-	}
 	
 }

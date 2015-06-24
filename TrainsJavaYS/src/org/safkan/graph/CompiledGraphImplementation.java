@@ -1,6 +1,7 @@
 package org.safkan.graph;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,9 +13,7 @@ import java.util.Map;
  *
  */
 class CompiledGraphImplementation implements CompiledGraph {
-
-	
-	private static class CompiledNode {
+	static class CompiledNode {
 		public String id;
 		public Map<String, Double> links;
 		
@@ -27,6 +26,9 @@ class CompiledGraphImplementation implements CompiledGraph {
 	private Graph graph;
 	private Map<String, CompiledNode> compiledNodeMap;
 	
+	CompiledNode  getCompiledNode(String nodeId) {
+		return this.compiledNodeMap.get(nodeId);
+	}
 	
 	CompiledGraphImplementation(Graph graph) {
 		this.graph = graph;
@@ -47,19 +49,22 @@ class CompiledGraphImplementation implements CompiledGraph {
 		}
 	}
 	
+	@Override
+	public List<Path> generatePaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance) {
+		Tree tree = new Tree(startingNode.getId());
+		
+		tree.expandTree(this, maxDepth, maxDistance);
+		
+		return tree.generatePaths(minDepth, targetNode);
+	}
 	
-	public Tree expandTreeFromNode(Node node, int depth) {
-		CompiledNode compiledNode = this.compiledNodeMap.get(node.getId());
+	@Override
+	public int countPaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance) {
+		Tree tree = new Tree(startingNode.getId());
 		
-		if (compiledNode == null) {
-			return null;
-		}
-		
-		Tree tree = new Tree(new TreeElement(node.getId()));
-		
-		
-		return null;
-		
+		tree.expandTree(this, maxDepth, maxDistance);
+
+		return tree.countPaths(minDepth, targetNode);
 	}
 	
 	public TraversedPath traverse(Path path) {
@@ -94,5 +99,9 @@ class CompiledGraphImplementation implements CompiledGraph {
 		return traversedPath;
 	}
 
+	
+	
+
+	
 	
 }
