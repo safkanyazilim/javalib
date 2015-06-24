@@ -8,6 +8,7 @@ class CompiledNode {
 	public Map<String, Double> links;
 	
 	// A-star related variables
+	
 	public double f;
 	public double g;
 	public double h;
