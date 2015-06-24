@@ -1,5 +1,6 @@
 package org.safkan.graph;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -147,19 +148,21 @@ public class Graph {
 	}
 	
 	/**
-	 * Getter for nodes -- package private.
+	 * Getter for nodes. It returns an unmodifiable set.
 	 * @return the nodes of this graph.
 	 */
-	Set<Node> getNodes() {
-		return this.nodes;
+	public Set<Node> getNodes() {
+		return Collections.unmodifiableSet(this.nodes);
 	}
 	
+	
+	
 	/**
-	 * Getter for edges -- package private.
+	 * Getter for edges. It returns an unmodifiable set.
 	 * @return the edges for this graph.
 	 */
-	Set<Edge> getEdges() {
-		return this.edges;
+	public Set<Edge> getEdges() {
+		return Collections.unmodifiableSet(this.edges);
 	}
 	
 	
