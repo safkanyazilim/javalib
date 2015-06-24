@@ -1,3 +1,39 @@
+About the project:
+
+This is an Eclipse project, created with Eclipse Luna. Built with
+JDK 8. Contains a few unit tests, which require JUnit4.
+
+The Main class is org.safkan.trains.Main.java
+
+It expects a filename to read the graph from.
+
+You can find the file to use right next to this README.txt file. It is
+called graph.txt. Its content is just:
+
+Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7
+
+The parser knows to ignore the "Graph" part.
+
+If you open this in Eclipse, editing the run configuration, and in the arguments
+tab just putting in graph.txt makes everything work.
+
+The output I get is as below:
+
+Output #1: 9.0
+Output #2: 5.0
+Output #3: 13.0
+Output #4: 22.0
+Output #5: NO SUCH ROUTE
+Output #6: 2
+Output #7: 3
+Output #8: 9.0
+Output #9: 9.0
+Output #10: 7
+
+(My distances are doubles, hence the .0 business.)
+
+
+===================================================================
 
 The story of the problem, design of the solution, and other thoughts...
 
