@@ -6,5 +6,8 @@ public interface CompiledGraph {
 	public TraversedPath traverse(Path path);
 	public List<Path> generatePaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance);
 	public int countPaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance);
-	
+	public Path findShortestPath(Node startingNode, Node targetNode);
+	public Double findLengthOfShortestPath(Node startingNode, Node targetNode);
+
+
 }

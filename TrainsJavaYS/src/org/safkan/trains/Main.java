@@ -42,6 +42,9 @@ public class Main {
 		
 		System.out.println("Path count:" + count);
 		
+		Double distance = compiledGraph.findLengthOfShortestPath(D,  D);
+		
+		System.out.println("Shortest path distance:" + distance);
 		
 	}
 

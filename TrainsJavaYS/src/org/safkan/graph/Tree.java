@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.safkan.graph.CompiledGraphImplementation.CompiledNode;
-
 public class Tree {
 	private TreeElement root;
 	private Queue<TreeElement> openQueue;

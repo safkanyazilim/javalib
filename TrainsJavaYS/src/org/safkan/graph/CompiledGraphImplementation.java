@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.safkan.graph.util.PriorityQueue;
+
 /**
  * <p>
  * Implementation of {@link CompiledGraph}
@@ -13,16 +15,6 @@ import java.util.Map;
  *
  */
 class CompiledGraphImplementation implements CompiledGraph {
-	static class CompiledNode {
-		public String id;
-		public Map<String, Double> links;
-		
-		public CompiledNode(Node node) {
-			this.id = node.getId();
-			this.links = new HashMap<String, Double>();
-		}
-	}
-	
 	private Graph graph;
 	private Map<String, CompiledNode> compiledNodeMap;
 	
@@ -32,7 +24,7 @@ class CompiledGraphImplementation implements CompiledGraph {
 	
 	CompiledGraphImplementation(Graph graph) {
 		this.graph = graph;
-		this.compiledNodeMap = new HashMap<String, CompiledGraphImplementation.CompiledNode>();
+		this.compiledNodeMap = new HashMap<String, CompiledNode>();
 	}
 	
 	void compile() {
@@ -95,12 +87,114 @@ class CompiledGraphImplementation implements CompiledGraph {
 			previousCompiledNode = compiledNode;
 		}
 		
-		
 		return traversedPath;
 	}
+	
+	public Path findShortestPath(Node startingNode, Node targetNode) {
+		CompiledNode compiledNode = this.runAStar(startingNode, targetNode);
+		
+		if (compiledNode == null) {
+			return null;
+		} else {
+			return this.constructPath(compiledNode);
+		}
+	}
 
+	public Double findLengthOfShortestPath(Node startingNode, Node targetNode) {
+		CompiledNode compiledNode = this.runAStar(startingNode, targetNode);
+		
+		if (compiledNode == null) {
+			return null;
+		} else {
+			return compiledNode.g;
+		}
+	}
 	
+	private CompiledNode runAStar(Node startingNode, Node targetNode) {
+
+        CompiledNode start = this.compiledNodeMap.get(startingNode.getId());
+        
+        if (start == null) {
+        	throw new IllegalArgumentException("Graph does not contain node (startingNode) with id: " + startingNode.getId());
+        }
+        
+        CompiledNode goal = this.compiledNodeMap.get(targetNode.getId());
+
+        if (goal == null) {
+        	throw new IllegalArgumentException("Graph does not contain node (targetNode) with id: " + targetNode.getId());
+        }
+        
+        PriorityQueue<CompiledNode> openQueue = new PriorityQueue<CompiledNode>();
+
+        for (CompiledNode node : this.compiledNodeMap.values()) {
+            node.f = Double.MAX_VALUE;
+            node.g = Double.MAX_VALUE;
+            node.h = 0.0F;
+            node.open = false;
+            node.closed = false;
+            node.cameFrom = null;
+        }
+
+        start.g = 0.0;
+        start.f = start.g + start.h;
+        start.open = true;
+
+        openQueue.insertObjectWithPriority(start, start.f);
+        CompiledNode current;
+        while ((current = openQueue.popLowestPriority()) != null) {
+
+            current.open = false;
+            current.closed = true;
+
+        	
+            if (current == goal) {
+            	if (current.g > 0.0) {
+            		return goal;
+            	} else {
+            		current.closed = false;
+            	}
+            }
+
+
+            for (String neighborKey : current.links.keySet()) {
+            	CompiledNode neighbor = this.compiledNodeMap.get(neighborKey);
+            	
+                if (neighbor.closed) {
+                    continue;
+                }
+
+                double tentative_g = current.g + current.links.get(neighborKey) ;
+
+                if (!neighbor.open || tentative_g < neighbor.g) {
+                    neighbor.cameFrom = current;
+                    neighbor.g  = tentative_g;
+                    
+                    neighbor.f = neighbor.g + neighbor.h;
+
+                    if (!neighbor.open) {
+                        openQueue.insertObjectWithPriority(neighbor, neighbor.f);
+                        neighbor.open  = true;
+                        
+                    }
+                }
+            }
+        }
+
+
+        return null;
+    }
 	
+	private Path constructPath(CompiledNode goal) {
+
+        Path path = new Path();
+
+        CompiledNode compiledNode;
+
+        for (compiledNode = goal; compiledNode != null; compiledNode = compiledNode.cameFrom) {
+        	path.addNodeToBeginning(new Node(compiledNode.id));
+        }
+        return path;
+    }
 
 	
 	
