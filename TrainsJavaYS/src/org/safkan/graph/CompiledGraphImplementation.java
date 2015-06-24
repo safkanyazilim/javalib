@@ -47,6 +47,21 @@ class CompiledGraphImplementation implements CompiledGraph {
 		}
 	}
 	
+	
+	public Tree expandTreeFromNode(Node node, int depth) {
+		CompiledNode compiledNode = this.compiledNodeMap.get(node.getId());
+		
+		if (compiledNode == null) {
+			return null;
+		}
+		
+		Tree tree = new Tree(new TreeElement(node.getId()));
+		
+		
+		return null;
+		
+	}
+	
 	public TraversedPath traverse(Path path) {
 		TraversedPath traversedPath = null;
 		
