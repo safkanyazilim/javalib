@@ -43,6 +43,10 @@ class CompiledGraphImplementation implements CompiledGraph {
 	
 	@Override
 	public List<Path> generatePaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance) {
+		if (startingNode == null) {
+			throw new IllegalArgumentException("startingNode may not be null.");
+		}
+		
 		Tree tree = new Tree(startingNode.getId());
 		
 		tree.expandTree(this, maxDepth, maxDistance);
@@ -52,6 +56,10 @@ class CompiledGraphImplementation implements CompiledGraph {
 	
 	@Override
 	public int countPaths(Node startingNode, Node targetNode, Integer minDepth, Integer maxDepth, Double maxDistance) {
+		if (startingNode == null) {
+			throw new IllegalArgumentException("startingNode may not be null.");
+		}
+		
 		Tree tree = new Tree(startingNode.getId());
 		
 		tree.expandTree(this, maxDepth, maxDistance);

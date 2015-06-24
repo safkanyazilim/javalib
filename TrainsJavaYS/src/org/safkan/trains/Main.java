@@ -1,7 +1,5 @@
 package org.safkan.trains;
 
-import java.util.List;
-
 import org.safkan.graph.CompiledGraph;
 import org.safkan.graph.Graph;
 import org.safkan.graph.Node;
