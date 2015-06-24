@@ -26,26 +26,36 @@ public class Main {
 		Node E = new Node("E");
 		
 		CompiledGraph compiledGraph = graph.compile();
-		//[C][E][B][C][D][E][B][C]
-		Path path = new Path(C, D, E, B, C, E, B, C);
 		
-		TraversedPath traversedPath = compiledGraph.traverse(path);
+		TraversedPath path1 = compiledGraph.traverse(new Path(A, B, C));
+		System.out.println("Output #1: " +  (path1 == null ? "NO SUCH ROUTE" : path1.getTotalDistance()));
+
+		TraversedPath path2 = compiledGraph.traverse(new Path(A, D));
+		System.out.println("Output #2: " +  (path2 == null ? "NO SUCH ROUTE" : path2.getTotalDistance()));
+
+		TraversedPath path3 = compiledGraph.traverse(new Path(A, D, C));
+		System.out.println("Output #3: " +  (path3 == null ? "NO SUCH ROUTE" : path3.getTotalDistance()));
+
+		TraversedPath path4 = compiledGraph.traverse(new Path(A, E, B, C, D));
+		System.out.println("Output #4: " +  (path4 == null ? "NO SUCH ROUTE" : path4.getTotalDistance()));
+
+		TraversedPath path5 = compiledGraph.traverse(new Path(A, E, D));
+		System.out.println("Output #5: " +  (path5 == null ? "NO SUCH ROUTE" : path5.getTotalDistance()));
+
+		int count1 = compiledGraph.countPaths(C, C, null, 3, null);
+		System.out.println("Output #6: " + count1);
+
+		int count2 = compiledGraph.countPaths(A,  C, 4	, 4, null);
+		System.out.println("Output #7: " + count2);
 		
-		if (traversedPath == null) {
-			System.out.println("No path");
-		} else {
-			System.out.println("Path length: " + traversedPath.getTotalDistance()); 
-			System.out.println("Path: " + traversedPath);
-		}
+		Double distance1 = compiledGraph.findLengthOfShortestPath(A,  C);
+		System.out.println("Output #8: " + (distance1 == null ? "NO SUCH ROUTE" : distance1));
 		
-		int count = compiledGraph.countPaths(C, C, null, null, 30.0);
-		
-		System.out.println("Path count:" + count);
-		
-		Double distance = compiledGraph.findLengthOfShortestPath(D,  D);
-		
-		System.out.println("Shortest path distance:" + distance);
-		
+		Double distance2 = compiledGraph.findLengthOfShortestPath(C,  C);
+		System.out.println("Output #9: " + (distance2 == null ? "NO SUCH ROUTE" : distance2));
+	
+		int count3 = compiledGraph.countPaths(C, C, null, null, 30.0);
+		System.out.println("Output #10: " + count3);
 	}
 
 }
